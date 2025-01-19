@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from 'react';
+import useTestStore from './store/useTestStore';
 
 function App() {
-  const [count, setCount] = useState(0)
+    // Zustand 스토어에서 상태와 동작을 가져옵니다.
+    const { testMessage, errorMessage, isLoading, fetchTestMessage } = useTestStore();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    // 컴포넌트가 처음 렌더링될 때 API 호출
+    useEffect(() => {
+        fetchTestMessage(); // API 호출
+    }, [fetchTestMessage]);
+
+    return (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+            <h1>Test API with Zustand</h1>
+            <button onClick={fetchTestMessage} disabled={isLoading} style={{ padding: '10px', fontSize: '16px' }}>
+                {isLoading ? 'Loading...' : 'Call /api/test'}
+            </button>
+            {testMessage && <p style={{ color: 'green', marginTop: '20px' }}>Response: {testMessage}</p>}
+            {errorMessage && <p style={{ color: 'red', marginTop: '20px' }}>Error: {errorMessage}</p>}
+        </div>
+    );
 }
 
-export default App
+export default App;
