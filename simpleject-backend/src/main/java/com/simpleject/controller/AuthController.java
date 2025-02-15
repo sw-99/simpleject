@@ -1,6 +1,8 @@
 package com.simpleject.controller;
 
+import com.simpleject.dto.request.LoginRequest;
 import com.simpleject.dto.request.SignupRequest;
+import com.simpleject.dto.response.LoginResponse;
 import com.simpleject.dto.response.SignupResponse;
 import com.simpleject.service.AuthService;
 import jakarta.validation.Valid;
@@ -20,4 +22,11 @@ public class AuthController {
         SignupResponse response = authService.registerUser(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginResponse response = authService.authenticateUser(request);
+        return ResponseEntity.ok(response);
+    }
+
 }
