@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://roundhouse.proxy.rlwy.net:53766/railway?allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: WWDLDUJkMMMVOUMlfDUAFsCxgabaAelC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:77595150261-q60tna5nm7n1e02babkuioamtj083l6j.apps.googleusercontent.com}
+            client-secret: ${GOOGLE_CLIENT_SECRET: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}
+            scope: profile, email
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+        redirect-uri: ${OAUTH2_REDIRECT_URI:http://localhost:8080/api/oauth/callback}
+
+jwt:
+  secret: "N7hu68R/My92I+RH1ggiDK6/RAVfDc7IIpT+uf4kKVJm0jBBejzsbB+2iyr3HUO5Qy86SiXyplBw7z1+srXG6g=="
+  expiration: 3600000  # 1시간
+
