@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.simpleject.util.UuidGenerator.generate;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -35,6 +37,7 @@ public class AuthService {
 
         // User 생성 후 저장
         User user = User.builder()
+                .publicId(generate())
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(encodedPassword)
