@@ -1,0 +1,11 @@
+pnpm install -D eslint-config-prettier
+
+pnpm install -D eslint-plugin-import
+
+pnpm install -D @types/node
+
+pnpm remove @tailwindcss/postcss tailwindcss
+pnpm add -D tailwindcss@3.4.17 postcss autoprefixer
+npx tailwindcss init -p
+pnpm add -D @types/node
+pnpm dlx shadcn@latest init

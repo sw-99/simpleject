@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import useTestStore from './store/useTestStore';
+import {useTestStore} from '@/store/useTestStore';
 
-function App() {
+export function App() {
     // Zustand 스토어에서 상태와 동작을 가져옵니다.
     const { testMessage, errorMessage, isLoading, fetchTestMessage } = useTestStore();
 
@@ -22,4 +22,3 @@ function App() {
     );
 }
 
-export default App;

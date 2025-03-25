@@ -9,7 +9,7 @@ interface TestStore {
     fetchTestMessage: () => Promise<void>;
 }
 
-const useTestStore = create<TestStore>((set) => ({
+export const useTestStore = create<TestStore>((set) => ({
     testMessage: '',
     errorMessage: '',
     isLoading: false,
@@ -30,4 +30,3 @@ const useTestStore = create<TestStore>((set) => ({
     },
 }));
 
-export default useTestStore;

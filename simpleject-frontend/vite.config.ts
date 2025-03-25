@@ -1,11 +1,20 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+/* eslint-disable import/no-default-export */
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import path from 'path'
 
 export default defineConfig({
   // Vite 플러그인 설정
   plugins: [
     react(), // React 플러그인 추가 (JSX 지원 및 HMR 등 제공)
   ],
+
+  // 경로 alias 설정
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'), // '@/...' 경로를 'src/'로 인식
+    },
+  },
 
   // 개발 서버 설정
   server: {
@@ -25,10 +34,10 @@ export default defineConfig({
     // Terser 설정
     terserOptions: {
       compress: {
-        drop_console: true, // console.log 제거 (배포 시 디버깅 코드 숨김)
+        drop_console: true, // console.log 제거
         drop_debugger: true, // debugger 제거
       },
-      mangle: true, // 변수 이름 난독화 (코드 가독성 저하로 보안 강화)
+      mangle: true, // 변수 이름 난독화
     },
   },
-});
+})
