@@ -22,6 +22,9 @@ export default defineConfig({
       '/api': {
         target: 'http://localhost:8080', // 프록시할 대상 서버 주소 (Spring Boot 서버)
         changeOrigin: true, // 원본 요청의 Origin을 대상 서버로 변경
+        secure: false, // HTTPS를 사용하는 경우 true로 설정
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

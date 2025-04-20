@@ -1,24 +1,46 @@
-import { useEffect } from 'react';
-import {useTestStore} from '@/store/useTestStore';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Layout } from '@/components/Layout/Layout';
+import { Home } from './pages/Home';
+import { MyPage } from './pages/MyPage';
+import { useAuthStore } from '@/store/useAuthStore';
+import {useEffect} from "react";
+import {axiosInstance} from "@/api/axios.ts"; // useAuthStore를 가져오기
 
-export function App() {
-    // Zustand 스토어에서 상태와 동작을 가져옵니다.
-    const { testMessage, errorMessage, isLoading, fetchTestMessage } = useTestStore();
+export const App = () => {
+    // const { isLoggedIn, setIsLoggedIn, token } = useAuthStore();
 
-    // 컴포넌트가 처음 렌더링될 때 API 호출
+    const { isLoggedIn, setIsLoggedIn } = useAuthStore();
+
     useEffect(() => {
-        fetchTestMessage(); // API 호출
-    }, [fetchTestMessage]);
+        const checkLoginStatus = async () => {
+            try {
+                const response = await axiosInstance.get('/auth/validate');  // 토큰 검증 API 호출
+                if (response.status === 200) {
+                    setIsLoggedIn(true);  // 유효한 토큰이 있으면 로그인 상태로 설정
+                }
+            } catch (error) {
+                setIsLoggedIn(false);  // 토큰이 유효하지 않으면 로그아웃 상태로 설정
+            }
+        };
 
+        checkLoginStatus();  // 컴포넌트가 마운트될 때 로그인 상태 확인
+    }, []);
+    
+    console.log("App isLoggedIn", isLoggedIn);
     return (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-            <h1>Test API with Zustand</h1>
-            <button onClick={fetchTestMessage} disabled={isLoading} style={{ padding: '10px', fontSize: '16px' }}>
-                {isLoading ? 'Loading...' : 'Call /api/test'}
-            </button>
-            {testMessage && <p style={{ color: 'green', marginTop: '20px' }}>Response: {testMessage}</p>}
-            {errorMessage && <p style={{ color: 'red', marginTop: '20px' }}>Error: {errorMessage}</p>}
-        </div>
-    );
-}
+        <Router>
+            <Layout>
+                <Routes>
+                    {/* 기본 홈 페이지 */}
+                    <Route path="/" element={<Home />} />
 
+                    {/* 로그인한 사용자만 접근 가능 */}
+                    <Route
+                        path="/mypage"
+                        element={isLoggedIn ? <MyPage /> : <Navigate to="/" />}
+                    />
+                </Routes>
+            </Layout>
+        </Router>
+    );
+};

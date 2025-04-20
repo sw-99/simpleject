@@ -85,7 +85,7 @@ public class OAuthService {
 
         // JWT 발급
         String token = jwtTokenProvider.generateToken(email);
-        return new LoginResponse(provider + " 로그인 성공", token);
+        return new LoginResponse(200, provider + " 로그인 성공", token);
     }
 
     // OAuth 로그인 성공 처리
@@ -94,6 +94,6 @@ public class OAuthService {
         String email = oauth2User.getAttribute("email");
 
         String token = jwtTokenProvider.generateToken(email);
-        return new LoginResponse("소셜 로그인 성공", token);
+        return new LoginResponse(200, "소셜 로그인 성공", token);
     }
 }

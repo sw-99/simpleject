@@ -7,6 +7,7 @@ import com.simpleject.dto.response.LoginResponse;
 import com.simpleject.dto.response.SignupResponse;
 import com.simpleject.entity.User;
 import com.simpleject.repository.jpa.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,19 +49,23 @@ public class AuthService {
         return new SignupResponse("회원가입이 완료되었습니다.");
     }
 
-    public LoginResponse authenticateUser(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("잘못된 사용자 이름 또는 비밀번호입니다."));
+    public LoginResponse authenticateUser(LoginRequest request, HttpServletResponse response) {
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("잘못된 이메일 또는 비밀번호입니다."));
 
         // 비밀번호 검증
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("잘못된 사용자 이름 또는 비밀번호입니다.");
+            throw new RuntimeException("잘못된 이메일 또는 비밀번호입니다.");
         }
 
         // JWT 토큰 발급
-        String token = jwtTokenProvider.generateToken(user.getUsername());
+        String accessToken = jwtTokenProvider.generateToken(user.getUsername());
+//        String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUsername());
+        jwtTokenProvider.setTokenInCookie(response, accessToken);
+//        jwtTokenProvider.setRefreshTokenInCookie(response, refreshToken);
 
-        return new LoginResponse("로그인 성공", token);
+
+        return new LoginResponse(200,"로그인 성공", accessToken);
     }
 
 }
